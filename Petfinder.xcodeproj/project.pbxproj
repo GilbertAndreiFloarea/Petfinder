@@ -41,6 +41,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Models/FavoritePets.swift,
+				Models/PetModel.swift,
+				"Models/PetModel+Random.swift",
 				Models/PetResponse.swift,
 				Models/PetSubModels/Address.swift,
 				Models/PetSubModels/Attributes.swift,
@@ -57,6 +59,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Models/FavoritePets.swift,
+				Models/PetModel.swift,
+				"Models/PetModel+Random.swift",
 				Models/PetResponse.swift,
 				Models/PetSubModels/Address.swift,
 				Models/PetSubModels/Attributes.swift,
