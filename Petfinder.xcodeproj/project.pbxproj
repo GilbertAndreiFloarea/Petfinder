@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1747F0742D96C11D00CD637B /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1747F0732D96C11D00CD637B /* Secrets.xcconfig */; };
+		1747F2872D96DC9000CD637B /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 1747F2862D96DC9000CD637B /* ViewInspector */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1747F2872D96DC9000CD637B /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +184,7 @@
 			);
 			name = PetfinderTests;
 			packageProductDependencies = (
+				1747F2862D96DC9000CD637B /* ViewInspector */,
 			);
 			productName = PetfinderTests;
 			productReference = 1747F0002D96BE4600CD637B /* PetfinderTests.xctest */;
@@ -242,6 +245,9 @@
 			);
 			mainGroup = 1747EFE52D96BE4400CD637B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1747F2852D96DC9000CD637B /* XCRemoteSwiftPackageReference "ViewInspector" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1747EFEF2D96BE4400CD637B /* Products */;
 			projectDirPath = "";
@@ -612,6 +618,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1747F2852D96DC9000CD637B /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1747F2862D96DC9000CD637B /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1747F2852D96DC9000CD637B /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1747EFE62D96BE4400CD637B /* Project object */;
 }

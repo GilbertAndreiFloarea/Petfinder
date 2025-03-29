@@ -39,7 +39,7 @@ import Combine
         
         Task {
             do {
-                let fetched = try await NetworkManager.shared.fetchPets().animals
+                let fetched = try await NetworkManager.shared.fetchPets(from: nil, currentZipCode: nil).animals
                 var seenIDs = Set<Int>()
                 self.pets = fetched.filter { pet in
                     guard !seenIDs.contains(pet.id) else { return false }

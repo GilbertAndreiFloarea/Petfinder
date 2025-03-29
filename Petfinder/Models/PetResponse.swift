@@ -33,6 +33,55 @@ struct Pet: Codable, Identifiable, Equatable {
     let environment: Environment
     let links: Links
     let videos: [Video]
+    
+    init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            func decode<T>(_ type: T.Type, forKey key: CodingKeys) -> T where T: Decodable {
+                do {
+                    return try container.decode(T.self, forKey: key)
+                } catch {
+                    print("⚠️ Failed to decode '\(key.stringValue)' as \(T.self): \(error)")
+                    fatalError("Decoding failure for key \(key): \(error)")
+                }
+            }
+
+            func decodeIfPresent<T>(_ type: T.Type, forKey key: CodingKeys) -> T? where T: Decodable {
+                do {
+                    return try container.decodeIfPresent(T.self, forKey: key)
+                } catch {
+                    print("⚠️ Failed to decodeIfPresent '\(key.stringValue)' as \(T.self): \(error)")
+                    return nil
+                }
+            }
+
+            id = decode(Int.self, forKey: .id)
+            name = decode(String.self, forKey: .name)
+            gender = decode(String.self, forKey: .gender)
+            size = decode(String.self, forKey: .size)
+            status = decode(String.self, forKey: .status)
+            distance = decodeIfPresent(Double.self, forKey: .distance)
+            url = decode(String.self, forKey: .url)
+            breeds = decode(Breeds.self, forKey: .breeds)
+            colors = decode(Colors.self, forKey: .colors)
+            tags = decode([String].self, forKey: .tags)
+            organizationAnimalID = decodeIfPresent(String.self, forKey: .organizationAnimalID)
+            statusChangedAt = decode(String.self, forKey: .statusChangedAt)
+            publishedAt = decode(String.self, forKey: .publishedAt)
+            species = decode(String.self, forKey: .species)
+            contact = decode(Contact.self, forKey: .contact)
+            type = decode(PetType.self, forKey: .type)
+            primaryPhotoCropped = decodeIfPresent(Photo.self, forKey: .primaryPhotoCropped)
+            organizationID = decode(String.self, forKey: .organizationID)
+            coat = decodeIfPresent(String.self, forKey: .coat)
+            environment = decode(Environment.self, forKey: .environment)
+            photos = decode([Photo].self, forKey: .photos)
+            age = decode(String.self, forKey: .age)
+            links = decode(Links.self, forKey: .links)
+            videos = decode([Video].self, forKey: .videos)
+            attributes = decode(Attributes.self, forKey: .attributes)
+            description = decodeIfPresent(String.self, forKey: .description)
+        }
 
     enum CodingKeys: String, CodingKey {
         case id, name, gender, size, status, distance, url, breeds, colors, tags, species, contact, type, coat, environment, photos, age, videos, attributes, description

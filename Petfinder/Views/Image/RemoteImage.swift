@@ -1,4 +1,5 @@
 import SwiftUI
+import ViewInspector
 
 final class ImageLoader: ObservableObject {
     

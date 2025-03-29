@@ -1,4 +1,4 @@
-enum PetType: String, Codable {
+enum PetType: String, Codable, CaseIterable {
     case cat = "Cat"
     case dog = "Dog"
     case rabbit = "Rabbit"

@@ -1,9 +1,15 @@
 import UIKit
 import CoreLocation
 
-final class NetworkManager {
+protocol NetworkManagerProtocol {
+    func downloadImage(fromURLString urlString: String) async throws -> UIImage?
+    func fetchPets(from url: String?, currentZipCode: String?) async throws -> PetResponse
+    func loadNextPageIfNeeded() async throws -> PetResponse?
+}
+
+final class NetworkManager: NetworkManagerProtocol {
     
-    static let shared = NetworkManager()
+    static var shared: NetworkManagerProtocol = NetworkManager()
     private let cache = NSCache<NSString, UIImage>()
     private let authService = AuthService()
     private var token: String = ""
@@ -89,6 +95,7 @@ final class NetworkManager {
         
     }
     
+    
     func loadNextPageIfNeeded() async throws -> PetResponse? {
         guard let nextURL = nextPageURL else {
             throw PError.invalidURL
@@ -101,6 +108,7 @@ final class NetworkManager {
             throw PError.unableToComplete
         }
     }
+    
     
     func downloadImage(fromURLString urlString: String) async throws -> UIImage? {
         let cacheKey = NSString(string: urlString)
@@ -121,52 +129,5 @@ final class NetworkManager {
         
         self.cache.setObject(image, forKey: cacheKey)
         return image
-    }
-}
-
-final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    private let manager = CLLocationManager()
-    private let geocoder = CLGeocoder()
-
-    @Published var zipcode: String? = nil
-    var zipcodeChanged: Bool = false
-    @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
-
-    override init() {
-        super.init()
-        manager.delegate = self
-        manager.requestWhenInUseAuthorization()
-        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        if manager.authorizationStatus == .authorizedWhenInUse ||
-           manager.authorizationStatus == .authorizedAlways {
-            manager.requestLocation()
-        }
-        self.zipcode = UserDefaults.standard.string(forKey: "lastKnownZipcode")
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else { return }
-
-        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            if let placemark = placemarks?.first, let zip = placemark.postalCode {
-                if self.zipcode != zip {
-                    self.zipcodeChanged = true
-                    UserDefaults.standard.setValue(zip, forKey: "lastKnownZipcode")
-                }
-                self.zipcode = zip
-            }
-        }
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("❌ Location error: \(error.localizedDescription)")
-    }
-
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        authorizationStatus = manager.authorizationStatus
-
-        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
-            manager.requestLocation()
-        }
     }
 }
