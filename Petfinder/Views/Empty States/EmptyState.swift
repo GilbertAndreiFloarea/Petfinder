@@ -28,8 +28,9 @@ struct EmptyState: View {
     }
 }
 
-//struct EmptyState_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EmptyState(imageName: .constant("empty-order"), message: "This is our test message.\nI'm making it a little long for testing.")
-//    }
-//}
+struct EmptyState_Previews: PreviewProvider {
+    static var previews: some View {
+        EmptyState(imageName: "pet_adoption_image",
+                   message: "You have no favorite pets yet.\nPlease pick one!")
+    }
+}

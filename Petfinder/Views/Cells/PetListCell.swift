@@ -1,27 +1,5 @@
 import SwiftUI
 
-struct PetListCellModel: Equatable, Identifiable {
-    let id: Int
-    let name: String
-    let type: PetType
-    let primaryBreed: String?
-    let secondaryBreed: String?
-    var photoURL: String
-    let isFavorite: Bool
-
-    static func from(_ pet: Pet, favorites: Favorites) -> PetListCellModel {
-        return PetListCellModel(
-            id: pet.id,
-            name: pet.name,
-            type: pet.type,
-            primaryBreed: pet.breeds.primary,
-            secondaryBreed: pet.breeds.secondary,
-            photoURL: pet.primaryPhotoCropped?.small ?? pet.photos.first?.small ?? "",
-            isFavorite: favorites.pets.contains(pet)
-        )
-    }
-}
-
 struct PetListCell: View {
     
     @EnvironmentObject var favorites: Favorites
@@ -86,5 +64,24 @@ struct PetListCell: View {
                 }
             }
         }
+    }
+}
+
+struct PetListCell_Previews: PreviewProvider {
+    static var previews: some View {
+        let mockPet = PetListCellModel(
+            id: 1,
+            name: "Buddy",
+            type: .dog,
+            primaryBreed: "Labrador",
+            secondaryBreed: nil,
+            photoURL: "",
+            isFavorite: true
+        )
+
+        PetListCell(pet: mockPet, isLoading: false)
+            .padding()
+            .previewLayout(.sizeThatFits)
+            .environmentObject(Favorites())
     }
 }

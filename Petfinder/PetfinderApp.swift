@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct PetfinderApp: App {
     var favorites = Favorites()
+    // TODO: Create lightweight Pet model in swift data
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([
 //            Item.self,
