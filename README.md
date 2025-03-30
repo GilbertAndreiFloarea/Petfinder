@@ -49,6 +49,9 @@ Petfinder is a beautifully designed iOS app built with SwiftUI that helps users 
  ⸻
 
 📸 Gif and photos
+
+
+
 ![Simulator Screen Recording - iPhone 16 Pro - 2025-03-30 at 14 23 18](https://github.com/user-attachments/assets/d8200aff-8815-47ca-9780-fbc55924635a)
 <img width="495" alt="Screenshot 2025-03-30 at 14 22 46" src="https://github.com/user-attachments/assets/f7cf4e22-46e3-49de-a420-88d893159bd6" />
 <img width="495" alt="Screenshot 2025-03-30 at 14 22 42" src="https://github.com/user-attachments/assets/357ecf12-8571-43b2-b153-7f88059d44b8" />
