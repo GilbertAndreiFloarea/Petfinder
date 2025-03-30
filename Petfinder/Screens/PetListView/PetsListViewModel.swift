@@ -10,6 +10,7 @@ import Combine
     @Published var isShowingDetail = false
     @Published var selectedPet: Pet?
     @Published var toastMessage: String?
+    private let zipcodeChangesToastMessage = "Hold on a minute. Updating results based on your location"
     
     private let locationManager = LocationManager()
     private var cancellables = Set<AnyCancellable>()
@@ -18,21 +19,6 @@ import Combine
         self.favorites = favorites
         observeZipcodeChanges()
     }
-
-    private func observeZipcodeChanges() {
-        locationManager.$zipcode
-            .compactMap { $0 }
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                guard self.locationManager.zipcodeChanged else { return }
-
-                self.pets = []
-                self.toastMessage = "Hold on a minute. Updating results based on your location"
-                self.getPets()
-            }
-            .store(in: &cancellables)
-    }
     
     func getPets(zipcode: String? = nil) {
         isLoading = true
@@ -40,31 +26,10 @@ import Combine
         Task {
             do {
                 let fetched = try await NetworkManager.shared.fetchPets(from: nil, currentZipCode: nil).animals
-                var seenIDs = Set<Int>()
-                self.pets = fetched.filter { pet in
-                    guard !seenIDs.contains(pet.id) else { return false }
-                    seenIDs.insert(pet.id)
-                    return true
-                }
+                self.pets = filterPets(pets: fetched)
                 isLoading = false
             } catch {
-                if let PError = error as? PError {
-                    switch PError {
-                    case .invalidURL:
-                        alertItem = AlertContext.Network.invalidURL
-                    case .invalidResponse:
-                        alertItem = AlertContext.Network.invalidResponse
-                    case .invalidData:
-                        alertItem = AlertContext.Network.invalidData
-                    case .unableToComplete:
-                        alertItem = AlertContext.Network.unableToComplete
-                    case .invalidToken:
-                        alertItem = AlertContext.Network.invalidToken
-                    }
-                } else {
-                    alertItem = AlertContext.Network.invalidResponse
-                }
-                
+                alertItem = mapErrorToAlert(error)
                 isLoading = false
             }
         }
@@ -78,12 +43,7 @@ import Combine
             do {
                 if let response = try await NetworkManager.shared.loadNextPageIfNeeded() {
                     await MainActor.run {
-                        var seenIDs = Set<Int>()
-                        self.pets = (self.pets + response.animals).filter { pet in
-                            guard !seenIDs.contains(pet.id) else { return false }
-                            seenIDs.insert(pet.id)
-                            return true
-                        }
+                        self.pets = filterPets(pets: self.pets + response.animals)
                         self.isLoading = false
                     }
                 } else {
@@ -93,7 +53,7 @@ import Combine
                 }
             } catch {
                 await MainActor.run {
-                    self.alertItem = AlertContext.Network.invalidResponse
+                    self.alertItem = self.mapErrorToAlert(error)
                     self.isLoading = false
                 }
             }
@@ -108,5 +68,47 @@ import Combine
         } else {
             favorites.pets.append(pet)
         }
+    }
+}
+
+extension PetsListViewModel {
+    
+    // We do this because the response sends duplicates pets (guess it's a random)
+    func filterPets(pets: [Pet]) -> [Pet] {
+        var seenIDs = Set<Int>()
+        return pets.filter { pet in
+            guard !seenIDs.contains(pet.id) else { return false }
+            seenIDs.insert(pet.id)
+            return true
+        }
+    }
+    
+    private func mapErrorToAlert(_ error: Error) -> AlertItem {
+        guard let error = error as? PError else {
+            return AlertContext.Network.invalidResponse
+        }
+        
+        switch error {
+        case .invalidURL: return AlertContext.Network.invalidURL
+        case .invalidResponse: return AlertContext.Network.invalidResponse
+        case .invalidData: return AlertContext.Network.invalidData
+        case .unableToComplete: return AlertContext.Network.unableToComplete
+        case .invalidToken: return AlertContext.Network.invalidToken
+        }
+    }
+    
+    private func observeZipcodeChanges() {
+        locationManager.$zipcode
+            .compactMap { $0 }
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                guard self.locationManager.zipcodeChanged else { return }
+
+                self.pets = []
+                self.toastMessage = zipcodeChangesToastMessage
+                self.getPets()
+            }
+            .store(in: &cancellables)
     }
 }

@@ -26,7 +26,7 @@ struct PetListCell: View {
             }
             .padding(.vertical, 8)
         } else {
-            if let pet = pet {
+            if let pet {
                 HStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)

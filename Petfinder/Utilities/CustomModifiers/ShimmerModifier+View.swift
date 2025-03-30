@@ -3,11 +3,11 @@ import SwiftUI
 struct ShimmerModifier: ViewModifier {
     @State private var phase: CGFloat = 0
     @State private var hasAppeared = false
-
+    
     var highlightColor: Color = Color.white.opacity(0.9)
     var baseColor: Color = .clear
     var animationDuration: Double = 1.5
-
+    
     func body(content: Content) -> some View {
         content
             .overlay(
@@ -36,7 +36,7 @@ struct ShimmerBar: View {
     var width: CGFloat
     var height: CGFloat
     var cornerRadius: CGFloat = 5
-
+    
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color.gray.opacity(0.3))

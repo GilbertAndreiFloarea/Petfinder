@@ -1,32 +1,82 @@
 import Foundation
 
 struct Pet: Codable, Identifiable, Equatable {
+    /// Unique identifier for the pet.
     let id: Int
+    
+    /// Name of the pet.
     let name: String
+    
+    /// Breed information for the pet.
     let breeds: Breeds
+    
+    /// Age category of the pet (e.g., "Young", "Adult").
     let age: String
+    
+    /// Gender of the pet (e.g., "Male", "Female").
     let gender: String
+    
+    /// Size category of the pet (e.g., "Small", "Medium", "Large").
     let size: String
+    
+    /// Adoption status of the pet (e.g., "Adoptable").
     let status: String
+    
+    /// Distance from the user's location, in miles.
     let distance: Double?
+    
+    /// Tags or keywords associated with the pet.
     let tags: [String]
+    
+    /// Additional characteristics of the pet such as spayed/neutered status, house training, and special needs.
     let attributes: Attributes
+    
+    /// Contact information for the pet's shelter or organization.
     let contact: Contact
+    
+    /// URL to the pet's detailed listing page.
     let url: String
+    
+    /// Description or biography of the pet.
     let description: String?
+    
+    /// Cropped primary photo of the pet.
     let primaryPhotoCropped: Photo?
+    
+    /// All available photos of the pet.
     let photos: [Photo]
+    
+    /// Type of pet (e.g., "Dog", "Cat").
     let type: PetType
     
+    /// Color details of the pet's coat.
     let colors: Colors
+    
+    /// Organization-specific ID for the pet.
     let organizationAnimalID: String?
+    
+    /// Timestamp for when the pet's status last changed.
     let statusChangedAt: String
+    
+    /// Timestamp for when the pet was published.
     let publishedAt: String
+    
+    /// Species classification of the pet (e.g., "Canine", "Feline").
     let species: String
+    
+    /// ID of the organization responsible for the pet.
     let organizationID: String
+    
+    /// Type of coat the pet has, if known.
     let coat: String?
+    
+    /// Information about the environment the pet is good with (e.g., cats, dogs, children).
     let environment: Environment
+    
+    /// Related links for more information about the pet and organization.
     let links: Links
+    
+    /// List of videos featuring the pet.
     let videos: [Video]
     
     init(from decoder: Decoder) throws {
@@ -110,4 +160,3 @@ struct Links: Codable {
 struct HrefLink: Codable {
     let href: String
 }
-

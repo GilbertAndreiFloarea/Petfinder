@@ -5,9 +5,10 @@ import SwiftData
 struct PetfinderApp: App {
     var favorites = Favorites()
     // TODO: Create lightweight Pet model in swift data
+    // TODO: Store API_KEY and API_SECRET on server, or use remote config.
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([
-//            Item.self,
+//            Pet.self,
 //        ])
 //        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 //

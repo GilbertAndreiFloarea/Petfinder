@@ -178,7 +178,3 @@ struct PetDetailView: View {
         )
     }
 }
-
-
-
-
